@@ -4,8 +4,32 @@ using namespace std;
 // prototype declarelation
 void insertion_sort(int *lists, int N);
 void bubble_sort(int *lists, int N);
+int selection_sort(int *lists, int N);
 void input_lists(int *lists, int N);
 void print_lists(int *lists, int N);
+
+int selection_sort(int *lists, int N){
+    int score = 0;
+    for (int i = 0; i < N; i++){
+        int min = lists[i];
+        int min_element = i;
+        bool flag = false;
+        for (int j = i; j < N; j++){
+            if (min > lists[j]){
+                min_element = j;
+                min = lists[j];
+                flag = true;
+            }
+        }
+        if (flag){
+                int tmp = lists[i];
+                lists[i] = lists[min_element];
+                lists[min_element] = tmp;
+                score++;
+            }
+    }
+    return score;
+}
 
 
 // insertion sort
@@ -54,6 +78,7 @@ void print_lists(int *lists, int N){
         if (i) cout << " ";
         cout << lists[i];
     }
+    cout << "\n";
 }
 
 int main(){
@@ -62,9 +87,9 @@ int main(){
     int *lists;
     lists = new int[N];
     input_lists(lists, N);
-    bubble_sort(lists, N);
-
-    // print_lists(lists, N);
+    int score = selection_sort(lists, N);
+    print_lists(lists, N);
+    cout << score << endl;
     delete[] lists;
     return 0;
 }
