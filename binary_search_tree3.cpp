@@ -7,7 +7,8 @@ struct Node{
     Node *left, *right, *parent;
 };
 
-Node *root, *NIL;
+Node *NIL;
+Node *root = NIL;
 
 void insert(int  k){
     Node *x, *y, *z;
@@ -78,11 +79,16 @@ void inorder(Node *u){
     }
 }
 
-void del(int  k){
-    Node *x, *z;
-    x = root;
-    z = new Node;
-    z -> key = k;
+Node* nxt_inorder(Node *u){
+    if (u -> left != NIL){
+        return nxt_inorder(u -> left);
+    }
+    else{
+        return u;
+    }
+}
+
+void contents(Node *x, Node *z){
     while (x != NIL){
         if (x -> key == z -> key){
             if (x -> left == NIL && x -> right == NIL){
@@ -96,32 +102,35 @@ void del(int  k){
             }
             else if (x -> left != NIL && x -> right != NIL){
                 // 子を二匹持っているケース
-                if (x -> parent -> right == x){
-                    // xが右の子
-                    x -> parent -> right = x -> right;
-                    x -> right -> parent = x -> parent;
-                    x -> left -> parent = x-> left;
-                    x -> right -> left = x -> left;
-                }else{
-                    // xが左の子
-                    x -> parent -> left = x -> left;
-                    x -> left -> parent = x -> parent;
-                    x -> right -> parent = x-> left;
-                    x -> left -> right = x -> right;
-                }
+                Node *nxt = nxt_inorder(x -> right);
+                int tmp = nxt -> key;
+                contents(nxt, nxt);
+                x -> key = tmp;
+                // if (x -> parent -> right == x){
+                //     // xが右の子
+                //     x -> parent -> right = x -> right;
+                //     x -> right -> parent = x -> parent;
+                //     x -> left -> parent = x-> left;
+                //     x -> right -> left = x -> left;
+                // }else{
+                //     // xが左の子
+                //     x -> parent -> left = x -> left;
+                //     x -> left -> parent = x -> parent;
+                //     x -> right -> parent = x-> left;
+                //     x -> left -> right = x -> right;
+                // }
             }
             else{
                 // 子が一つ
-                if ((x -> left == NIL) && (x -> right != NIL) && (x -> parent -> right = x)){
-                    // cout << x -> key << x -> parent -> right -> key << x -> parent -> left -> key;
+                if ((x -> left == NIL) && (x -> right != NIL) && (x -> parent -> right == x)){
                     // xの右に子がいて，xは右のこの場合
                     x -> parent -> right = x -> right;
                     x -> right -> parent = x -> parent;
-                }else if ((x -> left == NIL && x -> right != NIL) && (x -> parent -> left = x)){
+                }else if ((x -> left == NIL && x -> right != NIL) && (x -> parent -> left == x)){
                     // xの右に子がいて，xは左のこの場合
                     x -> parent -> left = x -> right;
                     x -> right -> parent = x -> parent;
-                }else if ((x -> right == NIL && x -> left != NIL) && (x -> parent -> right = x)){
+                }else if ((x -> right == NIL && x -> left != NIL) && (x -> parent -> right == x)){
                     // xの左に子がいて，xは右のこの場合
                     x -> parent -> right = x -> left;
                     x -> left -> parent = x -> parent;
@@ -141,6 +150,14 @@ void del(int  k){
             x = x -> left;
         }
     }
+}
+
+void del(int  k){
+    Node *x, *z;
+    x = root;
+    z = new Node;
+    z -> key = k;
+    contents(x, z);
 }
 
 int  main(){
@@ -167,12 +184,12 @@ int  main(){
             cin >> k;
             del(k);
         }
-        // else{
-        //     inorder(root);
-        //     cout << endl;
+        else{
+            inorder(root);
+            cout << endl;
             preorder(root);
             cout << endl;
-        // }
+        }
         
     }
 
