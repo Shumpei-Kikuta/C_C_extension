@@ -7,17 +7,12 @@ struct Node{
     Node *left, *right, *parent;
 };
 
-Node *NIL;
-Node *root = NIL;
+Node *NIL, *root = NIL;
 
 void insert(int  k){
-    Node *x, *y, *z;
-    x = root;
-    y = NIL;
-    z = new Node;
+    Node *x = root, *y = NIL, *z = new Node;
     z -> key = k;
-    z -> left = NIL;
-    z -> right = NIL;
+    z -> left = z -> right = NIL;
     while (x != NIL){
         y = x;
         if (x -> key < z -> key){
@@ -42,9 +37,7 @@ void insert(int  k){
 }
 
 bool find(int  k){
-    Node *x, *y;
-    x = root;
-    y = NIL;
+    Node *x=root, *y=NIL;
     while (x != NIL){
         if (x -> key < k){
             x = x -> right;
@@ -106,19 +99,6 @@ void contents(Node *x, Node *z){
                 int tmp = nxt -> key;
                 contents(nxt, nxt);
                 x -> key = tmp;
-                // if (x -> parent -> right == x){
-                //     // xが右の子
-                //     x -> parent -> right = x -> right;
-                //     x -> right -> parent = x -> parent;
-                //     x -> left -> parent = x-> left;
-                //     x -> right -> left = x -> left;
-                // }else{
-                //     // xが左の子
-                //     x -> parent -> left = x -> left;
-                //     x -> left -> parent = x -> parent;
-                //     x -> right -> parent = x-> left;
-                //     x -> left -> right = x -> right;
-                // }
             }
             else{
                 // 子が一つ
